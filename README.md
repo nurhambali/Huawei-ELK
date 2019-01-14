@@ -13,15 +13,15 @@ Support device Network Hauwei :
 
 ## Configure on All Device Huawei :
 
-[huawei] info-center source default channel 2 
+[huawei] `info-center source default channel 2 `
 
-[huawei]info-center timestamp log none 
+[huawei] `info-center timestamp log none` 
 
-[huawei] info-center timestamp trap none
+[huawei] `info-center timestamp trap none`
 
-[huawei] info-center timestamp debugging none
+[huawei] `info-center timestamp debugging none`
 
-[huawei]  info-center loghost 192.168.137.1 *(IP server elk)*
+[huawei]  `info-center loghost 192.168.137.1` *(IP server elk)*
 
 ## Specification ELK Server 
 
