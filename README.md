@@ -23,7 +23,7 @@ Support device Network Hauwei :
 
 [huawei]  info-center loghost 192.168.137.1 *(IP server elk)*
 
-## Configure Server ELK 
+## Specification ELK Server 
 
 | Required | Version|
 |----------|:----:|
@@ -31,4 +31,18 @@ Support device Network Hauwei :
 |**Logstash**|**6.5.4**|
 |**Kibana**|**6.5.4**|
 
-link install [ELK] ()
+## Plugins Logstash 
+
+bin/logstash-plugin install **Name Plugins**
+
+|Plugin Name | Version
+|------------|:---|
+|**logstash-input-file**|latest| 
+|**logstash-input-udp**|latest|
+|**logstash-input-syslog**|latest|
+|**logstash-filter-drop**|latest|
+|**logstash-filter-translate**|latest|
+|**logstash-filter-grok**|latest|
+|**logstash-output-elasticsearch**|latest|
+
+
