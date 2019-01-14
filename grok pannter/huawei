@@ -1,0 +1,65 @@
+####### huawei grock  pannter
+
+
+## Copy File to /usr/share/logstash/vendor/bundle/jruby/2.3.0/gems/logstash-patterns-core-4.1.2/patterns/huawei
+
+##Jan 13 14:12:28 192.168.137.12 HOSTNAME %%01SHELL/6/DISPLAY_CMDRECORD(l):
+HUAWEI %{TEST3}%{NUMBER}%{TEST3} %{SYSLOGHOST:Hostname} %{DATA:SyslogProgram}(?:\[%{POSINT:SyslogPID}\])?:
+
+## Jan 13 14:31:16 192.168.137.12 USG6300 %%01SHELL/4/LOGIN(l): access type:ssh vsys:root user:test login from 192.168.137.254
+HUAWEI_USG_LOGIN_SUCCESS_SSH %{HUAWEI} %{CISCO_REASON}:%{WORD:type} %{NOTSPACE} %{NOTSPACE}:%{USER:USER} %{CISCO_REASON} %{IP:UserIP}
+
+## Jan 13 14:30:24 192.168.137.12 USG6300 %%01SSH/4/SSH_FAIL(l): Failed to log in through SSH. (Ip=192.168.137.254, UserName=test, Times=1).
+HUAWEI_USG_LOGIN_FAILED_SSH %{HUAWEI} %{CISCO_REASON:info_login}. %{TEST}%{WORD}%{TEST2}%{IP:UserIP}, %{WORD}%{TEST2}%{USER:user}, %{WORD}%{TEST2}%{NUMBER:times}%{TEST}.
+
+
+## Jan 13 14:23:04 192.168.137.12 USG6300 %%01HTTPD/4/FAIL(l): User df(IP:192.168.137.254 ID:220) login failed
+## Jan 13 14:28:09 192.168.137.12 USG6300 %%01HTTPD/4/PASS(l): User test(IP:192.168.137.254 ID:220) login succeeded
+HUAWEI_USG_LOGIN_HTTP %{HUAWEI} %{NOTSPACE} %{USER:user}%{TEST}%{WORD}%{TEST1}%{IP:UserIP} %{NOTSPACE} %{GREEDYDATA:result}
+
+## Jan 13 14:12:28 192.168.137.1 USG6300 %%01SHELL/6/DISPLAY_CMDRECORD(l): task:vt0 ip:x.x.x.x user:coba usertype:4 vsys:root command:display ip interface brief.
+HUAWEI_USG_RECORD %{HUAWEI}%{TEST1}%{NOTSPACE:task} %{WORD}%{TEST1}%{IP:Ip} %{WORD}%{TEST1}%{USER:user} %{WORD}%{TEST1}%{WORD:usertype} %{WORD}%{TEST1}%{WORD:vsys} %{WORD}%{TEST1}%{GREEDYDATA:command}
+
+## Jan 13 14:36:01 192.168.137.13 CE12800 %%01SSH/5/SSH_USER_LOGIN_FAIL(s):CID=0x80932720;The SSH user failed to log in. (ServiceType=unknown, FailedReason=User password authentication failed, UserName=test, IPAddress=192.168.137.254, VPNInstanceName=_public_.)
+HUAWEI_CE_LOGIN_FAILED_SSH %{HUAWEI}%{WORD}%{TEST2}%{WORD:CID};%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:ServiceType}, %{WORD}%{TEST2}%{CISCO_REASON:FailedReason}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{CISCO_REASON:VPNInstanceName}.%{TEST}
+
+## Jan 13 14:42:28 192.168.137.13 CE12800 %%01SSH/5/SSH_USER_LOGIN(s):CID=0x80932720;The SSH user succeeded in logging in. (ServiceType=stelnet, UserName=test, IPAddress=192.168.137.254, VPNInstanceName=_public_.)
+HUAWEI_CE_LOGIN_SUCCESS_SSH %{HUAWEI}%{WORD}%{TEST2}%{WORD:CID};%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:ServiceType}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{CISCO_REASON:VPNInstanceName}.%{TEST}
+
+## Jan 13 14:35:14 192.168.137.13 CE12800 %%01CLI/5/CMDRECORD(s):CID=0x80ca2716;Recorded command information. (Task=VTY0, Ip=192.168.137.254, User=test, Command=\"commit\".)\r
+HUAWEI_CE_RECORD %{HUAWEI}%{WORD}%{TEST2}%{WORD:CID};%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:Task}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{QS:Command}.%{TEST}
+
+## Jan 13 14:42:28 192.168.137.13 CE-01 %%01CLI/5/INTER_CMDRECORD(s):CID=0x80d22714;Recorded command information. (Task=--, Ip=192.168.137.254, User=test, Command="", PromptInfo="Warning: The initial password poses security risks.The password needs to be changed. Change now? [Y/N]:", UserInput="N".)
+HUAWEI_CE_RECORD_Y_OR_N %{HUAWEI}%{WORD}%{TEST2}%{WORD:CID};%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{DATA:Task}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{DATA:Command}, %{WORD}%{TEST2}%{DATA:PromptInfo}, %{WORD}%{TEST2}%{DATA:UserInput}.%{TEST}
+
+## Jan 13 14:45:44 192.168.137.14 S12700 %%01SHELL/6/DISPLAY_CMDRECORD(s)[780]:Recorded display command information. (Task=VT0, Ip=192.168.137.254, VpnName=, User=test, AuthenticationMethod=\"Local-user\", Command="display info-center")
+HUAWEI_CORE_SW_RECORD %{HUAWEI}%{CISCO_REASON:Information}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:Task}, %{WORD}%{TEST2}%{DATA:Ip}, %{WORD}%{TEST2}, %{WORD}%{TEST2}%{DATA:User}, %{WORD}%{TEST2}%{NOTSPACE}, %{WORD}%{TEST2}%{QS:Command}%{TEST}
+
+## Jan 13 14:45:40 192.168.137.14 S12700 %%01SHELL/5/LOGIN(s)[779]:The user succeeded in logging in to VTY0. (UserType=SSH, UserName=test, AuthenticationMethod=\"Local-user\", Ip=192.168.137.254, VpnName=)
+HUAWEI_CORE_SW_SUCCESS_SSH %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:ServiceType}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{NOTSPACE}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{CISCO_REASON}%{TEST}
+
+## Jan 13 14:47:10 192.168.137.14 S12700 %%01SSH/4/SSH_FAIL(s)[781]:Failed to login through SSH. (IP=192.168.137.254, VpnInstanceName= , UserName=a, Times=1, FailedReason=User password authentication failed)
+HUAWEI_CORE_SW_FAILED_SSH %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{SPACE}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{NUMBER:Times}, %{WORD}%{TEST2}%{CISCO_REASON:FailedReason}%{TEST}
+
+
+## Jan 13 15:49:58 192.168.137.14 S12700 %%01SHELL/5/LOGOUT(s)[820]:The user succeeded in logging out of VTY0. (UserType=SSH, UserName=test, Ip=192.168.137.254, VpnName=)
+HUAWEI_CORE_SW_SSH_LOGOUT %{HUAWEI}%{CISCO_REASON:Information}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:UserType}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{CISCO_REASON:VpnName}%{TEST}
+
+## Jan 13 14:47:53 192.168.137.14 S12700 %%01HTTP/3/LOGINFAIL(s)[785]:User login failed. (UserName=a, IPAddress=192.168.137.254, VpnName=, Info=Failed to authenticate the user)
+HUAWEI_CORE_SW_FAILED_HTTP %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}, %{WORD}%{TEST2}%{CISCO_REASON:FailedReason}%{TEST}
+
+## Jan 13 14:49:17 192.168.137.14 S12700 %%01HTTP/6/LOGINOK(s)[786]:User logged in successfully. (UserName=test, IPAddress=192.168.137.254, VpnName=)
+HUAWEI_CORE_SW_SUCCESS_HTTP %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{TEST}
+
+## Jan 13 14:54:12 192.168.137.15 AR2200 %%01SSH/4/SSH_FAIL(l)[3]:Failed to log in through SSH. (Ip=192.168.137.254, UserName=test, Times=1).
+HUAWEI_RT_FAILED_SSH %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{NUMBER:Times}%{TEST}
+
+## Jan 13 14:53:27 192.168.137.15 AR2200 %%01SHELL/5/CMDRECORD(l)[0]:Record command information. (Task=vt0, Ip=192.168.137.254, User=test, Command=\"info-center loghost 192.168.137.1545 transport udp\", Result=Success)
+HUAWEI_RT_RECORD %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{WORD:Task}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{QS:Command}, %{WORD}%{TEST2}%{WORD:Result}%{TEST}
+
+## Jan 13 14:54:47 192.168.137.15 AR2200 LINE/4/USERLOGIN:OID 1.3.6.1.4.1.2011.5.25.207.2.2 A user login. (UserIndex=130, UserName=test, UserIP=192.168.137.254, UserChannel=VTY1)
+HUAWEI_RT_LOGIN_USER %{HUAWEI}%{DATA:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{NUMBER:UserIndex}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:UserIP}, %{WORD}%{TEST2}%{CISCO_REASON:UserChannel}
+TEST ([\(\)]+)
+TEST1 ([\:]+)
+TEST2 ([\=]+)
+TEST3 ([\<\>]+)
