@@ -44,5 +44,5 @@ bin/logstash-plugin install **Name Plugins**
 |**logstash-filter-translate**|latest|
 |**logstash-filter-grok**|latest|
 |**logstash-output-elasticsearch**|latest|
-
+|***logstash-output-file***|latest|
 
