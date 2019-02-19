@@ -1,14 +1,14 @@
 {
-  "order": 0,
-  "template": "huawei-*",
+  "index_patterns": "huawei-*",
   "settings": {
-    "index.refresh_interval": "5s"
+    "index.refresh_interval": "5s",
+    "number_of_shards": 1
   },
-  "mappings": {
-    "huawei": {
-      "dynamic_templates": [
-        {
-         "message_field" : {
+    "mappings" : {
+      "huawei" : {
+        "dynamic_templates" : [
+          {
+            "message_field" : {
               "path_match" : "message",
               "match_mapping_type" : "string",
               "mapping" : {
@@ -17,7 +17,7 @@
               }
             }
           },
-		          {
+          {
             "string_fields" : {
               "match" : "*",
               "match_mapping_type" : "string",
@@ -34,32 +34,203 @@
             }
           }
         ],
-        "properties" : {
-          "@timestamp" : {
-            "type" : "date"
+        "properties":{
+          "message":{"type":"text"},
+          "@timestamp":{"type":"date"},
+          "hostname":{"type":"keyword"},
+          "type":{"type":"keyword"},
+          "host":{"type":"keyword"},
+          "user":{
+            "properties":{
+              "ip":{"type":"ip"},
+              "user":{"type":"keyword"},
+              "try":{"type":"keyword"},
+              "task":{"type":"keyword"},
+              "type":{"type":"keyword"},
+              "command":{"type":"keyword"},
+              "result":{"type":"keyword"},
+              "service_type":{"type":"keyword"},
+              "failed_reason":{"type":"keyword"},
+              "vpn_instance_name":{"type":"keyword"},
+              "channel":{"type":"keyword"}
+            }
           },
-          "@version" : {
-            "type" : "keyword"
+          "action":{"type":"keyword"},
+          "cid":{"type":"keyword"},
+          "program":{"type":"keyword"},
+          "info":{"type":"keyword"},
+          "syslog":{
+           "properties":{
+             "program":{"type":"keyword"},
+             "id":{"type":"keyword"}
+           }
           },
-          "geoip" : {
-            "dynamic" : true,
+          "vpn":{
+            "properties":{
+              "date":{"type":"date","format":"yyyy-MM-dd"},
+              "time":{"type":"date","format":"hh:mm:ss"},
+              "sent":{"type":"integer"},
+              "duration":{"type":"float"},
+              "rcvd":{"type":"integer"},
+              "type":{"type":"keyword"},
+              "service":{"type":"keyword"},
+              "virtual_ip":{"type":"ip"},
+              "dst_ip":{"type":"ip"},
+              "src_ip":{"type":"ip"},
+              "vpn":{"type":"keyword"}
+            }
+          },
+          "time":{
+            "properties":{
+              "begin":{"type":"date", "format":"HH:mm:ss"},
+              "end":{"type":"date", "format":"HH:mm:ss"}
+          }
+          
+        },
+          "attack":{
+            "properties":{
+            "protocol":{"type":"keyword"},
+            "dst":{"type":"ip"},
+            "src":{"type":"ip"},
+            "max_speed":{"type":"long"},
+            "slot":{"type":"long"},
+            "type":{"type":"keyword"},
+            "user":{"type":"keyword"},
+            "total_packets":{"type":"long"},
+            "program":{"type":"keyword"},
+            "src_port":{"type":"keyword"},
+            "dst_port":{"type":"keyword"}
+            }
+        },
+          "ipsec":{
+            "properties":{
+              "protocol":{"type":"keyword"},
+              "local_ip":{"type":"ip"},
+              "remote_ip":{"type":"ip"},
+              "srcip_begin":{"type":"ip"},
+              "srcip_end":{"type":"ip"},
+              "srcport_begin":{"type":"keyword"},
+              "srcport_end":{"type":"keyword"},
+              "dstip_begin":{"type":"ip"},
+              "dstip_end":{"type":"ip"},
+              "dstport_begin":{"type":"keyword"},
+              "dstport_end":{"type":"keyword"},
+              "send_packets":{"type":"keyword"},
+              "send_bytes":{"type":"integer"},
+              "recv_packets":{"type":"integer"}
+            }
+          },
+          "firewall":{
+            "properties":{
+              "policy":{"type":"keyword"},
+              "src_zone":{"type":"keyword"},
+              "dst_zone":{"type":"keyword"},
+              "action":{"type":"keyword"},
+              "receive_interface":{"type":"keyword"},
+              "time_begin":{"type":"date","format":"HH:mm:ss"},
+              "time_end":{"type":"date","format":"HH:mm:ss"}
+            }
+          },
+          "ips":{
+            "properties":{
+              "src_ip":{"type":"ip"},
+              "dst_ip":{"type":"ip"},
+              "src_port":{"type":"keyword"},
+              "dst_port":{"type":"keyword"},
+              "user":{"type":"keyword"},
+              "protocol":{"type":"keyword"},
+              "application":{"type":"keyword"},
+              "profile":{"type":"keyword"},
+              "sign_name":{"type":"keyword"},
+              "sign_id":{"type":"keyword"},
+              "event_num":{"type":"keyword"},
+              "target":{"type":"keyword"},
+              "severity":{"type":"keyword"},
+              "os":{"type":"keyword"},
+              "category":{"type":"keyword"},
+              "action":{"type":"keyword"}
+            }
+          },
+          "ids":{
+            "properties":{
+              "src_ip":{"type":"ip"},
+              "dst_ip":{"type":"ip"},
+              "src_port":{"type":"keyword"},
+              "dst_port":{"type":"keyword"},
+              "user":{"type":"keyword"},
+              "protocol":{"type":"keyword"},
+              "application":{"type":"keyword"},
+              "profile":{"type":"keyword"},
+              "sign_name":{"type":"keyword"},
+              "sign_id":{"type":"keyword"},
+              "event_num":{"type":"keyword"},
+              "target":{"type":"keyword"},
+              "severity":{"type":"keyword"},
+              "os":{"type":"keyword"},
+              "category":{"type":"keyword"},
+              "action":{"type":"keyword"}
+            }
+          
+            
+          },
+          "ids_src_geoip":{
+            "dynamic": true,
             "properties" : {
-              "ip" : {
-                "type" : "ip"
-              },
-              "location" : {
-                "type" : "geo_point"
-              },
-              "latitude" : {
-                "type" : "half_float"
-              },
-              "longitude" : {
-                "type" : "half_float"
-              }
+              "continent_code":{"type":"keyword"},
+              "country_code2" : {"type":"keyword"},
+              "country_code3" : {"type":"keyword"},
+              "country_name" : {"type":"keyword"},
+              "ip": { "type": "ip" },
+              "location" : { "type" : "geo_point" },
+              "latitude" : { "type" : "half_float" },
+              "longitude" : { "type" : "half_float" },
+              "city_name":{"type":"keyword"}
+            }
+          },
+          "ids_dst_geoip":{
+            "dynamic": true,
+            "properties" : {
+              "continent_code":{"type":"keyword"},
+              "country_code2" : {"type":"keyword"},
+              "country_code3" : {"type":"keyword"},
+              "country_name" : {"type":"keyword"},
+              "ip": { "type": "ip" },
+              "location" : { "type" : "geo_point" },
+              "latitude" : { "type" : "half_float" },
+              "longitude" : { "type" : "half_float" },
+              "city_name":{"type":"keyword"}
+            }
+          },
+          "ips_src_geoip":{
+            "dynamic": true,
+            "properties" : {
+              "continent_code":{"type":"keyword"},
+              "country_code2" : {"type":"keyword"},
+              "country_code3" : {"type":"keyword"},
+              "country_name" : {"type":"keyword"},
+              "ip": { "type": "ip" },
+              "location" : { "type" : "geo_point" },
+              "latitude" : { "type" : "half_float" },
+              "longitude" : { "type" : "half_float" },
+              "city_name":{"type":"keyword"}
+            }
+          },
+          "ips_dst_geoip":{
+            "dynamic": true,
+            "properties" : {
+              "continent_code":{"type":"keyword"},
+              "country_code2" : {"type":"keyword"},
+              "country_code3" : {"type":"keyword"},
+              "country_name" : {"type":"keyword"},
+              "ip": { "type": "ip" },
+              "location" : { "type" : "geo_point" },
+              "latitude" : { "type" : "half_float" },
+              "longitude" : { "type" : "half_float" },
+              "city_name":{"type":"keyword"}
             }
           }
+          
         }
       }
-    },
-    "aliases" : { }
-  }
+    }
+}
