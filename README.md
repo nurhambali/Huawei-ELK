@@ -27,9 +27,9 @@ Support device Network Hauwei :
 
 | Required | Version|
 |----------|:----:|
-|**Elasticsearch**|**6.5.4**|
-|**Logstash**|**6.5.4**|
-|**Kibana**|**6.5.4**|
+|**Elasticsearch**|**7.5.0**|
+|**Logstash**|**7.5.0**|
+|**Kibana**|**7.5.0**|
 
 ## Plugins Logstash 
 
