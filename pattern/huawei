@@ -1,65 +1,122 @@
-####### huawei grock  pannter
+### FireWall USG6300 V500R005C10
+##### HUAWEI 
+#<190>Oct 16 2019 08:40:44 USG6300-01 %%01SHELL/6/DISPLAY_CMDRECORD(s)[316]:
+#<190> USG6300-01 %%01SHELL/6/DISPLAY_CMDRECORD(s):
+#<164> AR2200 LINE/4/USERLOGOUT:
+#HUAWEI \<%{NUMBER}\>(%{CISCOTIMESTAMP}|) %{HOSTNAME:Hostname} (\%%%{NUMBER}|)%{DATA:ModuleName}\/%{NUMBER:Serverity}\/%{DATA:Brief}(\((l|s)\)|)(\[%{NUMBER}\]|):
+#HUAWEI \<%{NUMBER}\>(%{CISCOTIMESTAMP}|) %{HOSTNAME:Hostname} (\%%%{NUMBER}|)%{DATA:ModuleName}\/%{NUMBER:Serverity}\/%{DATA:Brief}(\((l|s)\)|)(\[%{NUMBER}\]|):(CID=%{NOTSPACE};|)
+HUAWEI \<%{NUMBER}\>(%{CISCOTIMESTAMP}|) (%{HOSTNAME:Hostname}| %{HOSTNAME:Hostname}) (\%%%{NUMBER}|)%{DATA:ModuleName}\/%{NUMBER:Serverity}\/%{DATA:Brief}(\((l|s)\)|)(\[%{NUMBER}\]|):(CID=%{NOTSPACE};|)
+#### SHELL
+#SHELL/5/CMDRECORD
+CMDRECORD (%{HUAWEI}(%{SPACE}%{CISCO_REASON:Description}|%{CISCO_REASON:Description}). \(Task=%{NOTSPACE:Task}, Ip=%{NOTSPACE:IP}, VpnName=, User=%{NOTSPACE:User}, AuthenticationMethod="%{NOTSPACE:AuthenticationMethod}", Command="%{GREEDYDATA:Command}"\)|%{HUAWEI} task=%{NOTSPACE:Task}, ip=%{IP:IP}, user=%{USER:User}, usertype=%{NOTSPACE:UserType}, vsys=%{NOTSPACE}, command=%{GREEDYDATA:Command}, result=%{NOTSPACE}.|%{HUAWEI}%{CISCO_REASON:Description}. \(Task=%{DATA:Task}, Ip=%{NOTSPACE:IP}, User=%{USER:User}, Command="%{GREEDYDATA:Command}", Result=%{DATA:Result}\)|%{HUAWEI}%{CISCO_REASON:Description}. \(Task=%{DATA:Task}, Ip=%{IP:IP}, User=%{USER:User}, Command="%{GREEDYDATA:Command}".\)%{GREEDYDATA})
+
+#SHELL/6/CMDCONFIRM_NOPROMPT
+CMDCONFIRM_NOPROMPT %{HUAWEI}%{CISCO_REASON:Description}. \(Task=%{DATA:Task}, IP=%{NOTSPACE:IP}, VpnName=, User=%{USER:User}, Command="%{DATA:Command}", UserInput=%{GREEDYDATA:UserInput}\)
+
+#SHELL/6/CMDCONFIRM_RECORD
+CMDCONFIRM_RECORD %{HUAWEI}%{CISCO_REASON:Description} "%{GREEDYDATA:Command}", %{GREEDYDATA}.\(Task=%{NOTSPACE:Task}, IP=%{NOTSPACE:IP}, VpnName=, User=%{USER:User}\)
+
+#SHELL/6/CMDCONFIRM_UNIFORMRECORD
+CMDCONFIRM_UNIFORMRECORD %{HUAWEI}%{CISCO_REASON:Description}. \(Task=%{NOTSPACE}, IP=%{NOTSPACE}, VpnName=, User=%{USER:User}, Command="%{GREEDYDATA:Command}", PromptInfo="%{GREEDYDATA:PromptInfo}", UserInput=%{GREEDYDATA:UserInput}\)
+
+#SHELL/6/DISPLAY_CMDRECORD
+DISPLAY_CMDRECORD (%{HUAWEI}(%{SPACE}%{CISCO_REASON:Description}|%{CISCO_REASON:Description}). \(Task=%{NOTSPACE:Task}, Ip=%{NOTSPACE:IP}, VpnName=, User=%{NOTSPACE:User}, AuthenticationMethod="%{NOTSPACE}", Command="%{GREEDYDATA:Command}"\)|%{HUAWEI} task:%{NOTSPACE:Task} ip:%{IP:IP} user:%{USER:User} usertype:%{WORD} vsys:%{WORD} command:%{CISCO_REASON:Command}.)
+
+#SHELL/4/LOGINFAILED
+LOGINFAILED %{HUAWEI} access type:%{DATA:AccessType} User %{USER:User} %{CISCO_REASON:Description} from %{NOTSPACE:IP}\(times=%{NOTSPACE:Times}\).|%{HUAWEI}Failed to login. \(Ip=%{NOTSPACE:IP}, UserName=%{DATA:UserName}, Times=%{DATA:Times}, AccessType=%{DATA:AccessType}, VpnName=\)
+
+#SHELL/5/LOGIN & SHELL/4/LOGIN
+LOGIN (%{HUAWEI}%{CISCO_REASON:Description}. \(UserType=%{NOTSPACE:UserType}, UserName=%{NOTSPACE:UserName}, AuthenticationMethod="%{NOTSPACE:AuthenticationMethod}", Ip=%{NOTSPACE:IP}, VpnName=\)|%{HUAWEI} access type:%{NOTSPACE:UserType} vsys:%{NOTSPACE} user:%{NOTSPACE:UserName} login from %{NOTSPACE:IP}|%{HUAWEI}%{CISCO_REASON:Description}. \(UserType=%{DATA:UserType}, UserName=%{USER:User}, Ip=%{IP:IP}, VpnName=%{NOTSPACE}\)%{GREEDYDATA})
+
+#SHELL/5/LOGOUT & SHELL/4/LOGOUT
+LOGOUT (%{HUAWEI}%{CISCO_REASON:Description}. \(UserType=%{NOTSPACE:UserType}, UserName=%{USER:User}, Ip=%{NOTSPACE:IP}, VpnName=\)|%{HUAWEI} access type:%{NOTSPACE:UserType} vsys:%{NOTSPACE} user:%{USER:User} %{GREEDYDATA:msg}|%{HUAWEI}%{CISCO_REASON:Description}. \(UserType=%{DATA:UserType}, UserName=%{USER:User}, Ip=%{IP:IP}, VpnName=%{NOTSPACE}, Reason=%{GREEDYDATA:Reason}\)%{GREEDYDATA})
+
+#### SSH
+#SSH/4/SSH_FAIL
+SSH_FAIL (%{HUAWEI}%{CISCO_REASON:Description}. \(IP=%{NOTSPACE:IP}, VpnInstanceName=%{GREEDYDATA}, UserName=%{USER:UserName}, Times=%{DATA:Times}, FailedReason=%{GREEDYDATA:FailedReason}\)|%{HUAWEI} %{CISCO_REASON:Description}. \(Ip=%{IP:IP}, UserName=%{USER:UserName}, Times=%{DATA:Times}\)|%{HUAWEI}%{CISCO_REASON:Description}. \(Ip=%{IP:IP}, UserName=%{USER:UserName}, Times=%{DATA:Times}\))
+
+#SSH/5/SSH_USER_LOGIN (CloudEngine 12800)
+SSH_USER_LOGIN %{HUAWEI}%{CISCO_REASON:Description}. \(ServiceType=%{DATA:UserType}, UserName=%{USER:User}, IPAddress=%{IP:IP}, VPNInstanceName=%{NOTSPACE}\)
+
+#SSH/5/SSH_USER_LOGOUT (CloudEngine 12800)
+SSH_USER_LOGOUT %{HUAWEI}%{CISCO_REASON:Description}. \(ServiceType=%{DATA:UserType}, LogoutReason=%{GREEDYDATA:LogoutReason}, UserName=%{USER:User}, IPAddress=%{IP:IP}, VPNInstanceName=%{NOTSPACE}\)%{GREEDYDATA}
+
+#SSH_USER_LOGIN_FAIL (CloudEngine 12800)
+SSH_USER_LOGIN_FAIL %{HUAWEI}%{CISCO_REASON:Description}. \(ServiceType=%{DATA:UserType}, FailedReason=%{CISCO_REASON:FailedReason}, UserName=%{USER:User}, IPAddress=%{IP:IP}, VPNInstanceName=%{NOTSPACE}\)\r\n
+HUAWEI_CE_LOGIN_FAILED_SSH %{HUAWEI}%{WORD}%{TEST2}%{WORD:cid};%{CISCO_REASON:info}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:user.service_type}, %{WORD}%{TEST2}%{CISCO_REASON:user.failed_reason}, %{WORD}%{TEST2}%{USER:user.user}, %{WORD}%{TEST2}%{IP:user.ip}, %{WORD}%{TEST2}%{CISCO_REASON:user.vpn_instance_name}.%{TEST}
+### WEB 
+#HTTPD/4/FAIL & HTTPD/6/PASS & HTTPD/5/OUT
+#WEB (%{HUAWEI}User %{USER:User}\(IP:%{IP:IP} %{NOTSPACE}\) %{CISCO_REASON:Description}|%{HUAWEI} User %{USER:User}\(IP:%{IP:IP} %{NOTSPACE}\) %{CISCO_REASON:Description})
+WEB (%{HUAWEI}User %{USER:User}\(IP:%{IP:IP} %{NOTSPACE}\) %{CISCO_REASON:Description}|%{HUAWEI} User %{USER:User}\(IP:%{IP:IP} %{NOTSPACE}\) %{CISCO_REASON:Description}|%{HUAWEI}%{CISCO_REASON:Description}. \(UserName=%{GREEDYDATA:User}, IPAddress=%{IP:IP}, VpnName=%{GREEDYDATA}\))
 
 
-## Copy File to /usr/share/logstash/vendor/bundle/jruby/2.3.0/gems/logstash-patterns-core-4.1.2/patterns/huawei
+### Traffick Logs Paket deny
+#<188>2019-10-18 02:29:13 USG6000V1 %%01SECLOG/4/PACKET_DENY(l):IPVer=4,Protocol=icmp,SourceIP=10.1.1.2,DestinationIP=192.168.137.1,SourcePort=8,DestinationPort=0,BeginTime=1571365753,EndTime=1571365753,SourceVpnID=0,DestinationVpnID=0,SourceZone=trust,DestinationZone=untrust,PolicyName=clinet_to_router,CloseReason=policy-deny.
+PACKET_DENY %{HUAWEI}IPVer=%{DATA},Protocol=%{DATA:Protocol},SourceIP=%{DATA:SourceIP},DestinationIP=%{NOTSPACE:DestinationIP},SourcePort=%{NOTSPACE:SourcePort},DestinationPort=%{NOTSPACE:DestinationPort},BeginTime=%{NOTSPACE},EndTime=%{NOTSPACE},SourceVpnID=%{NOTSPACE},DestinationVpnID=%{NOTSPACE},SourceZone=%{NOTSPACE:SourceZone},DestinationZone=%{NOTSPACE:DestinationZone},PolicyName=%{NOTSPACE:PolicyName},CloseReason=%{NOTSPACE:CloseReason}.
 
-##Jan 13 14:12:28 192.168.137.12 HOSTNAME %%01SHELL/6/DISPLAY_CMDRECORD(l):
-HUAWEI %{TEST3}%{NUMBER}%{TEST3} %{SYSLOGHOST:Hostname} %{DATA:SyslogProgram}(?:\[%{POSINT:SyslogPID}\])?:
-
-## Jan 13 14:31:16 192.168.137.12 USG6300 %%01SHELL/4/LOGIN(l): access type:ssh vsys:root user:test login from 192.168.137.254
-HUAWEI_USG_LOGIN_SUCCESS_SSH %{HUAWEI} %{CISCO_REASON}:%{WORD:type} %{NOTSPACE} %{NOTSPACE}:%{USER:USER} %{CISCO_REASON} %{IP:UserIP}
-
-## Jan 13 14:30:24 192.168.137.12 USG6300 %%01SSH/4/SSH_FAIL(l): Failed to log in through SSH. (Ip=192.168.137.254, UserName=test, Times=1).
-HUAWEI_USG_LOGIN_FAILED_SSH %{HUAWEI} %{CISCO_REASON:info_login}. %{TEST}%{WORD}%{TEST2}%{IP:UserIP}, %{WORD}%{TEST2}%{USER:user}, %{WORD}%{TEST2}%{NUMBER:times}%{TEST}.
+### VPN 
+# <190>Oct 18 2019 06:35:11 USG6000V1 %%01USERS/6/LOGINSUC(l)[1548]:id=USG6000V1-ENSP time="2019-10-18 06:35:08" fw=USG6000V1 pri=6 vsys=public vpn=testing user="testing" src=192.168.137.57 dst=0.0.0.0 duration=0s rcvd=0byte(s) sent=0byte(s) type=vpn service=5 msg="Session: testing successed to login."
+LOGINSUC (%{HUAWEI} id=%{NOTSPACE}|%{HUAWEI}id=%{NOTSPACE}) time="%{DATA}" fw=%{DATA} pri=%{NOTSPACE} vsys=%{NOTSPACE} vpn=%{DATA:vpn} user="%{USER:user}" src=%{NOTSPACE:src} dst=%{NOTSPACE:dst} duration=%{NOTSPACE:duration}s rcvd=%{NOTSPACE:rcvd}byte\(s\) sent=%{NOTSPACE:sent}byte\(s\) type=%{NOTSPACE} service=%{NOTSPACE} msg="%{GREEDYDATA:Description}."
 
 
-## Jan 13 14:23:04 192.168.137.12 USG6300 %%01HTTPD/4/FAIL(l): User df(IP:192.168.137.254 ID:220) login failed
-## Jan 13 14:28:09 192.168.137.12 USG6300 %%01HTTPD/4/PASS(l): User test(IP:192.168.137.254 ID:220) login succeeded
-HUAWEI_USG_LOGIN_HTTP %{HUAWEI} %{NOTSPACE} %{USER:user}%{TEST}%{WORD}%{TEST1}%{IP:UserIP} %{NOTSPACE} %{GREEDYDATA:result}
-
-## Jan 13 14:12:28 192.168.137.1 USG6300 %%01SHELL/6/DISPLAY_CMDRECORD(l): task:vt0 ip:x.x.x.x user:coba usertype:4 vsys:root command:display ip interface brief.
-HUAWEI_USG_RECORD %{HUAWEI}%{TEST1}%{NOTSPACE:task} %{WORD}%{TEST1}%{IP:Ip} %{WORD}%{TEST1}%{USER:user} %{WORD}%{TEST1}%{WORD:usertype} %{WORD}%{TEST1}%{WORD:vsys} %{WORD}%{TEST1}%{GREEDYDATA:command}
-
-## Jan 13 14:36:01 192.168.137.13 CE12800 %%01SSH/5/SSH_USER_LOGIN_FAIL(s):CID=0x80932720;The SSH user failed to log in. (ServiceType=unknown, FailedReason=User password authentication failed, UserName=test, IPAddress=192.168.137.254, VPNInstanceName=_public_.)
-HUAWEI_CE_LOGIN_FAILED_SSH %{HUAWEI}%{WORD}%{TEST2}%{WORD:CID};%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:ServiceType}, %{WORD}%{TEST2}%{CISCO_REASON:FailedReason}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{CISCO_REASON:VPNInstanceName}.%{TEST}
-
-## Jan 13 14:42:28 192.168.137.13 CE12800 %%01SSH/5/SSH_USER_LOGIN(s):CID=0x80932720;The SSH user succeeded in logging in. (ServiceType=stelnet, UserName=test, IPAddress=192.168.137.254, VPNInstanceName=_public_.)
-HUAWEI_CE_LOGIN_SUCCESS_SSH %{HUAWEI}%{WORD}%{TEST2}%{WORD:CID};%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:ServiceType}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{CISCO_REASON:VPNInstanceName}.%{TEST}
-
-## Jan 13 14:35:14 192.168.137.13 CE12800 %%01CLI/5/CMDRECORD(s):CID=0x80ca2716;Recorded command information. (Task=VTY0, Ip=192.168.137.254, User=test, Command=\"commit\".)\r
-HUAWEI_CE_RECORD %{HUAWEI}%{WORD}%{TEST2}%{WORD:CID};%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:Task}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{QS:Command}.%{TEST}
-
-## Jan 13 14:42:28 192.168.137.13 CE-01 %%01CLI/5/INTER_CMDRECORD(s):CID=0x80d22714;Recorded command information. (Task=--, Ip=192.168.137.254, User=test, Command="", PromptInfo="Warning: The initial password poses security risks.The password needs to be changed. Change now? [Y/N]:", UserInput="N".)
-HUAWEI_CE_RECORD_Y_OR_N %{HUAWEI}%{WORD}%{TEST2}%{WORD:CID};%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{DATA:Task}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{DATA:Command}, %{WORD}%{TEST2}%{DATA:PromptInfo}, %{WORD}%{TEST2}%{DATA:UserInput}.%{TEST}
-
-## Jan 13 14:45:44 192.168.137.14 S12700 %%01SHELL/6/DISPLAY_CMDRECORD(s)[780]:Recorded display command information. (Task=VT0, Ip=192.168.137.254, VpnName=, User=test, AuthenticationMethod=\"Local-user\", Command="display info-center")
-HUAWEI_CORE_SW_RECORD %{HUAWEI}%{CISCO_REASON:Information}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:Task}, %{WORD}%{TEST2}%{DATA:Ip}, %{WORD}%{TEST2}, %{WORD}%{TEST2}%{DATA:User}, %{WORD}%{TEST2}%{NOTSPACE}, %{WORD}%{TEST2}%{QS:Command}%{TEST}
-
-## Jan 13 14:45:40 192.168.137.14 S12700 %%01SHELL/5/LOGIN(s)[779]:The user succeeded in logging in to VTY0. (UserType=SSH, UserName=test, AuthenticationMethod=\"Local-user\", Ip=192.168.137.254, VpnName=)
-HUAWEI_CORE_SW_SUCCESS_SSH %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:ServiceType}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{NOTSPACE}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{CISCO_REASON}%{TEST}
-
-## Jan 13 14:47:10 192.168.137.14 S12700 %%01SSH/4/SSH_FAIL(s)[781]:Failed to login through SSH. (IP=192.168.137.254, VpnInstanceName= , UserName=a, Times=1, FailedReason=User password authentication failed)
-HUAWEI_CORE_SW_FAILED_SSH %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{SPACE}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{NUMBER:Times}, %{WORD}%{TEST2}%{CISCO_REASON:FailedReason}%{TEST}
+#### Add BACKLIST
+#<188>Oct 18 2019 07:42:30 USG6300-01 %%01BLACKLIST/4/ADDOK(l): A blacklist entry was added. (SyslogId=100, IpVersion=IPv4, SrcIp=103.199.99.114, DstIp=any, SrcPort=any, DstPort=any, Protocol=any, User=any, VSysId=0, VSys=root, Reason= IPS Attack , Timeout=5 min)
+ADDOK (%{HUAWEI}%{CISCO_REASON:Description}|%{HUAWEI} %{CISCO_REASON:Description}). \(SyslogId=%{NOTSPACE:SyslogId}, IpVersion=%{NOTSPACE:IpVersion}, SrcIp=%{NOTSPACE:SrcIp}, DstIp=%{NOTSPACE:DstIp}, SrcPort=%{NOTSPACE:SrcPort}, DstPort=%{NOTSPACE:DstPort}, Protocol=%{NOTSPACE:Protocol}, User=%{NOTSPACE:User}, VSysId=%{NOTSPACE}, VSys=%{NOTSPACE}, Reason= %{GREEDYDATA:Reason}, Timeout=%{GREEDYDATA:Timeout}min\)
 
 
-## Jan 13 15:49:58 192.168.137.14 S12700 %%01SHELL/5/LOGOUT(s)[820]:The user succeeded in logging out of VTY0. (UserType=SSH, UserName=test, Ip=192.168.137.254, VpnName=)
-HUAWEI_CORE_SW_SSH_LOGOUT %{HUAWEI}%{CISCO_REASON:Information}. %{TEST}%{WORD}%{TEST2}%{CISCO_REASON:UserType}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{CISCO_REASON:VpnName}%{TEST}
+### Remove BACKLIST
+#<188>Oct 18 2019 08:36:36 USG6000V1 %%01BLACKLIST/4/DELOK(l)[2134]:A blacklist entry was deleted. (SyslogId=100, IpVersion=IPv4, SrcIp=1.1.1.1, DstIp=any, SrcPort=any, DstPort=any,Protocol=any, User=any, VSysId=0, VSys=public)
+DELOK (%{HUAWEI}%{CISCO_REASON:Description}|%{HUAWEI} %{CISCO_REASON:Description}). \(SyslogId=%{NOTSPACE:SyslogId}, IpVersion=%{NOTSPACE:IpVersion}, SrcIp=%{NOTSPACE:SrcIp}, DstIp=%{NOTSPACE:DstIp}, SrcPort=%{NOTSPACE:SrcPort}, DstPort=%{NOTSPACE:DstPort},Protocol=%{NOTSPACE:Protocol}, User=%{NOTSPACE:User}, VSysId=%{NOTSPACE}, VSys=%{NOTSPACE}\)
 
-## Jan 13 14:47:53 192.168.137.14 S12700 %%01HTTP/3/LOGINFAIL(s)[785]:User login failed. (UserName=a, IPAddress=192.168.137.254, VpnName=, Info=Failed to authenticate the user)
-HUAWEI_CORE_SW_FAILED_HTTP %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}, %{WORD}%{TEST2}%{CISCO_REASON:FailedReason}%{TEST}
 
-## Jan 13 14:49:17 192.168.137.14 S12700 %%01HTTP/6/LOGINOK(s)[786]:User logged in successfully. (UserName=test, IPAddress=192.168.137.254, VpnName=)
-HUAWEI_CORE_SW_SUCCESS_HTTP %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{TEST}
+### Clear all backlist
+#<188>Oct 18 2019 08:39:01 USG6000V1 %%01BLACKLIST/4/DELALLOK(l)[2158]:All blacklist entries were deleted. (SyslogId=100, VSysId=0, VSys=public)
+DELALLOK %{HUAWEI}%{CISCO_REASON:Description}. \(SyslogId=%{NOTSPACE:SyslogId}, VSysId=%{NOTSPACE}, VSys=%{NOTSPACE}\)
 
-## Jan 13 14:54:12 192.168.137.15 AR2200 %%01SSH/4/SSH_FAIL(l)[3]:Failed to log in through SSH. (Ip=192.168.137.254, UserName=test, Times=1).
-HUAWEI_RT_FAILED_SSH %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{NUMBER:Times}%{TEST}
 
-## Jan 13 14:53:27 192.168.137.15 AR2200 %%01SHELL/5/CMDRECORD(l)[0]:Record command information. (Task=vt0, Ip=192.168.137.254, User=test, Command=\"info-center loghost 192.168.137.1545 transport udp\", Result=Success)
-HUAWEI_RT_RECORD %{HUAWEI}%{CISCO_REASON:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{WORD:Task}, %{WORD}%{TEST2}%{IP:IPAddress}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{QS:Command}, %{WORD}%{TEST2}%{WORD:Result}%{TEST}
+####IPS DETECT
+###<188>Oct 18 2019 09:47:43 USG6600-DMZ-02 %%01IPS/4/DETECT(l): Intrusion was detected. (SyslogId=3878486016, VSys="root", Policy="InternetLanToServer", SrcIp=10.8.8.11, DstIp=10.50.50.5, SrcPort=50396, DstPort=53, SrcZone=lan, DstZone=dmz, User="unknown", Protocol=UDP, Application="DNS", Profile="ips block all", SignName="Dns request for Bitcoin mining pool detected", SignId=505470, EventNum=1, Target=server, Severity=medium, Os=both, Category=Other, Action=Block)
 
-## Jan 13 14:54:47 192.168.137.15 AR2200 LINE/4/USERLOGIN:OID 1.3.6.1.4.1.2011.5.25.207.2.2 A user login. (UserIndex=130, UserName=test, UserIP=192.168.137.254, UserChannel=VTY1)
-HUAWEI_RT_LOGIN_USER %{HUAWEI}%{DATA:InfoLogin}. %{TEST}%{WORD}%{TEST2}%{NUMBER:UserIndex}, %{WORD}%{TEST2}%{USER:User}, %{WORD}%{TEST2}%{IP:UserIP}, %{WORD}%{TEST2}%{CISCO_REASON:UserChannel}
-TEST ([\(\)]+)
-TEST1 ([\:]+)
-TEST2 ([\=]+)
-TEST3 ([\<\>]+)
+DETECT %{HUAWEI}(%{CISCO_REASON:Description}| %{CISCO_REASON:Description}). \(SyslogId=%{NOTSPACE}, VSys="%{NOTSPACE}", Policy="%{GREEDYDATA:Policy}", SrcIp=%{NOTSPACE:SrcIp}, DstIp=%{NOTSPACE:DstIp}, SrcPort=%{NOTSPACE:SrcPort}, DstPort=%{NOTSPACE:DstPort}, SrcZone=%{NOTSPACE:SrcZone}, DstZone=%{NOTSPACE:DstZone}, User="%{NOTSPACE}", Protocol=%{NOTSPACE:Protocol}, Application="%{NOTSPACE:Application}", Profile="%{DATA:Profile}", SignName="%{DATA:SignName}", SignId=%{DATA:SignId}, EventNum=%{NOTSPACE}, Target=%{NOTSPACE:Target}, Severity=%{NOTSPACE:Severity}, Os=%{NOTSPACE:Os}, Category=%{NOTSPACE:Category}, (Reference=%{NOTSPACE:Reference}, |)Action=%{NOTSPACE:Action}\)
+
+#### IPS BONET
+### <190> USG6300-01 %%01IPS/4/BOTNET(l): A botnet was detected. (SyslogId=[syslog-id], VSys=[vsys-name], Policy=tets, SrcIp=[source-ip], DstIp=[destination-ip], SrcPort=[source-port], DstPort=[destination-port], SrcZone=[source-zone], DstZone=[destination-zone], User=[user-name], Protocol=[protocol], Application=[application-name], Profile=[profile-name], SignName=[signature-name], SignId=[signature-id], EventNum=[event-number], Target=[target], Severity=[severity], Os=[operating-system], Category=[category], Role=[role], SrcLocation=[source-location], DstLocation=[destination-location], Action=[action])
+
+BOTNET %{HUAWEI}(%{CISCO_REASON:Description}| %{CISCO_REASON:Description}). \(SyslogId=%{NOTSPACE}, VSys=%{NOTSPACE}, Policy=%{NOTSPACE:Policy}, SrcIp=%{NOTSPACE:SrcIp}, DstIp=%{NOTSPACE:DstIp}, SrcPort=%{NOTSPACE:SrcPort}, DstPort=%{NOTSPACE:DstPort}, SrcZone=%{NOTSPACE:SrcZone}, DstZone=%{NOTSPACE:DstZone}, User=%{NOTSPACE:User}, Protocol=%{NOTSPACE:Protocol}, Application=%{NOTSPACE:Application}, Profile=%{NOTSPACE:Profile}, SignName=%{NOTSPACE:SignName}, SignId=%{NOTSPACE:SignId}, EventNum=%{NOTSPACE}, Target=%{NOTSPACE:Target}, Severity=%{NOTSPACE:Severity}, Os=%{NOTSPACE:Os}, Category=%{NOTSPACE:Category}, Role=%{NOTSPACE:Role}, SrcLocation=%{NOTSPACE:SrcLocation}, DstLocation=%{NOTSPACE:DstLocation}, Action=%{DATA:Action}\)
+
+### IPS CNC
+#<190> USG6300-01 %%01IPS/4/CNC(l): A malware domain was detected. (SyslogId=[syslog-id], VSys=[vsys-name], Policy=[policy-name], SrcIp=[source-ip-address], DstIp=[destination-ip-address], SrcPort=[source-port], DstPort=[destination-port], SrcZone=[source-zone], DstZone=[destination-zone], User=[user-name], Protocol=[protocol], Application=[application-name],Profile=[profile-name],DomainName=[domain-name], EventNum=[event-number], Action=[action])
+
+CNC %{HUAWEI}(%{CISCO_REASON:Description}| %{CISCO_REASON:Description}). \(SyslogId=%{NOTSPACE}, VSys=%{NOTSPACE}, Policy=%{GREEDYDATA:Policy}, SrcIp=%{NOTSPACE:SrcIp}, DstIp=%{NOTSPACE:DstIp}, SrcPort=%{NOTSPACE:SrcPort}, DstPort=%{NOTSPACE:DstPort}, SrcZone=%{NOTSPACE:SrcZone}, DstZone=%{NOTSPACE:DstZone}, User=%{NOTSPACE}, Protocol=%{NOTSPACE:Protocol}, Application=%{NOTSPACE:Application},Profile=%{DATA:Profile},DomainName=%{NOTSPACE:DomainName}, EventNum=%{NOTSPACE:EventNum}, Action=%{NOTSPACE:Action}\)
+
+
+### IPS EXCEPTION
+#<190> USG6300-01 %%01IPS/4/EXCEPTION(l): The packet matched an exception IPS signature. (SyslogId=[syslog-id], VSys=[vsys-name], Policy=[policy-name], SrcIp=[source-ip], DstIp=[destination-ip], SrcPort=[source-port], DstPort=[destination-port], SrcZone=[source-zone], DstZone=[destination-zone], User=[user-name], Protocol=[protocol], Application=[application-name], Profile=[profile-name], SignName=[signature-name], SignId=[signature-id], EventNum=[event-number], Target=[target], Severity=[severity], Os=[operating-system], Category=[category], Action=[action])
+
+EXCEPTION %{HUAWEI}(%{CISCO_REASON:Description}| %{CISCO_REASON:Description}). \(SyslogId=%{NOTSPACE}, VSys=%{NOTSPACE}, Policy=%{GREEDYDATA:Policy}, SrcIp=%{NOTSPACE:SrcIp}, DstIp=%{NOTSPACE:DstIp}, SrcPort=%{NOTSPACE:SrcPort}, DstPort=%{NOTSPACE:DstPort}, SrcZone=%{NOTSPACE:SrcZone}, DstZone=%{NOTSPACE:DstZone}, User=%{NOTSPACE}, Protocol=%{NOTSPACE:Protocol}, Application=%{NOTSPACE:Application}, Profile=%{DATA:Profile}, SignName=%{DATA:SignName}, SignId=%{DATA:SignId}, EventNum=%{NOTSPACE}, Target=%{NOTSPACE:Target}, Severity=%{NOTSPACE:Severity}, Os=%{NOTSPACE:Os}, Category=%{NOTSPACE:Category}, Action=%{NOTSPACE:Action}\)
+
+### IPS TROJAN
+#<190> USG6300-01 %%01IPS/4/TROJAN(l): A trojan horse was detected. (SyslogId=[syslog-id], VSys=[vsys-name], Policy=[policy-name], SrcIp=[source-ip], DstIp=[destination-ip], SrcPort=[source-port], DstPort=[destination-port], SrcZone=[source-zone], DstZone=[destination-zone], User=[user-name], Protocol=[protocol], Application=[application-name], Profile=[profile-name], SignName=[signature-name], SignId=[signature-id], EventNum=[event-number], Target=[target], Severity=[severity], Os=[operating-system], Category=[category], Role=[role], SrcLocation=[source-location], DstLocation=[destination-location], Action=[action])
+
+#TROJAN %{HUAWEI} %{CISCO_REASON:Description}. \(SyslogId=%{NOTSPACE}, VSys=%{NOTSPACE}, Policy=%{NOTSPACE:Policy}, SrcIp=%{NOTSPACE:SrcIp}, DstIp=%{NOTSPACE:DstIp}, SrcPort=%{NOTSPACE:SrcPort}, DstPort=%{NOTSPACE:DstPort}, SrcZone=%{NOTSPACE:SrcZone}, DstZone=%{NOTSPACE:DstZone}, User=%{NOTSPACE:User}, Protocol=%{NOTSPACE:Protocol}, Application=%{NOTSPACE:Application}, Profile=%{NOTSPACE:Profile}, SignName=%{NOTSPACE:SignName}, SignId=%{NOTSPACE:SignId}, EventNum=%{NOTSPACE}, Target=%{NOTSPACE:Target}, Severity=%{NOTSPACE:Severity}, Os=%{NOTSPACE:Os}, Category=%{NOTSPACE:Category}, Role=%{NOTSPACE:Role}, SrcLocation=%{NOTSPACE:SrcLocation}, DstLocation=%{NOTSPACE:DstLocation}, Action=%{DATA:Action}\)
+
+TROJAN %{HUAWEI}(%{CISCO_REASON:Description}| %{CISCO_REASON:Description}). \(SyslogId=%{NOTSPACE}, VSys=%{NOTSPACE}, Policy="%{NOTSPACE:Policy}", SrcIp=%{NOTSPACE:SrcIp}, DstIp=%{NOTSPACE:DstIp}, SrcPort=%{NOTSPACE:SrcPort}, DstPort=%{NOTSPACE:DstPort}, SrcZone=%{NOTSPACE:SrcZone}, DstZone=%{NOTSPACE:DstZone}, User=%{NOTSPACE}, Protocol=%{NOTSPACE:Protocol}, Application="%{NOTSPACE:Application}", Profile="%{CISCO_REASON:Profile}", SignName="%{GREEDYDATA:SignName}", SignId=%{NOTSPACE:SignId}, EventNum=%{NOTSPACE}, Target=%{NOTSPACE:Target}, Severity=%{NOTSPACE:Severity}, Os=%{NOTSPACE:Os}, Category=%{NOTSPACE:Category}, Role=%{NOTSPACE:Role}, SrcLocation=%{NOTSPACE:SrcLocation}, DstLocation=%{NOTSPACE:DstLocation}, Action=%{DATA:Action}\)
+
+### IPS WORM
+## <190> USG6300-01 %%01IPS/4/WORM(l): A worm was detected. (SyslogId=[syslog-id], VSys=[vsys-name], Policy=[policy-name], SrcIp=[source-ip], DstIp=[destination-ip], SrcPort=[source-port], DstPort=[destination-port], SrcZone=[source-zone], DstZone=[destination-zone], User=[user-name], Protocol=[protocol], Application=[application-name], Profile=[profile-name], SignName=[signature-name], SignId=[signature-id], EventNum=[event-number], Target=[target], Severity=[severity], Os=[operating-system], Category=[category], Action=[action])
+
+WORM %{HUAWEI}(%{CISCO_REASON:Description}| %{CISCO_REASON:Description}). \(SyslogId=%{NOTSPACE}, VSys=%{NOTSPACE}, Policy=%{NOTSPACE:Policy}, SrcIp=%{NOTSPACE:SrcIp}, DstIp=%{NOTSPACE:DstIp}, SrcPort=%{NOTSPACE:SrcPort}, DstPort=%{NOTSPACE:DstPort}, SrcZone=%{NOTSPACE:SrcZone}, DstZone=%{NOTSPACE:DstZone}, User=%{NOTSPACE:User}, Protocol=%{NOTSPACE:Protocol}, Application=%{NOTSPACE:Application}, Profile=%{NOTSPACE:Profile}, SignName=%{NOTSPACE:SignName}, SignId=%{NOTSPACE:SignId}, EventNum=%{NOTSPACE}, Target=%{NOTSPACE:Target}, Severity=%{NOTSPACE:Severity}, Os=%{NOTSPACE:Os}, Category=%{NOTSPACE:Category}, Action=%{NOTSPACE:Action}\)
+
+#BGP/3/STATE_CHG_UPDOWN (AR2200)
+STATE_CHG_UPDOWN %{HUAWEI}%{CISCO_REASON:Description} %{IP:Peer} changed from %{NOTSPACE:StatusFrom} to %{NOTSPACE:StatusTo}. \(InstanceName=%{DATA:InstanceName}, StateChangeReason=%{GREEDYDATA:StateChangeReason}\)
+
+#RM/4/IPV4_DEFT_RT_CHG (AR2200)
+IPV4_DEFT_RT_CHG %{HUAWEI}%{CISCO_REASON:Description}. \(ChangeType=%{DATA:ChangeType}, InstanceId=%{NUMBER:InstanceId}, Protocol=%{NOTSPACE:Protocol}, ExitIf=%{NOTSPACE:ExitIf}, Nexthop=%{IPV4:Nexthop}, Neighbour=%{IP:Neighbour}, Preference=%{NUMBER:Preference}, Label=%{NOTSPACE:Label}, Metric=%{NUMBER:Metric}\)
+
+#### Anti Virus
+##<188>Jan 23 2020 01:52:32  USG6300-01 %%01AV/4/VIRUS(l):A virus was detected. (SyslogId=691, VSys="public", Policy="test", SrcIp=192.168.0.1, DstIp=192.168.11.1, SrcPort=80, DstPort=59996, SrcZone=untrust, DstZone=trust, User="unknown", Protocol=TCP, Application="HTTP_Download", Profile="default", EventNum=1, SignatureId=72216610, VirusName="Trojan.Win32.Agent.2115242", DetectionType="virus detect", Direction=download, FileName="attachment", FileType="exe", Action=Block, Hash="B63B6E6E69477A1D")
+
+AV %{HUAWEI}%{CISCO_REASON:Description}. \(SyslogId=%{NOTSPACE}, VSys=%{NOTSPACE}, Policy="%{NOTSPACE:Policy}", SrcIp=%{NOTSPACE:SrcIp}, DstIp=%{NOTSPACE:DstIp}, SrcPort=%{NOTSPACE:SrcPort}, DstPort=%{NOTSPACE:DstPort}, SrcZone=%{NOTSPACE:SrcZone}, DstZone=%{NOTSPACE:DstZone}, User=%{NOTSPACE}, Protocol=%{NOTSPACE:Protocol}, Application="%{NOTSPACE:Application}", Profile="%{CISCO_REASON:Profile}", EventNum=%{NOTSPACE}, SignatureId=%{NOTSPACE:SignId}, VirusName="%{GREEDYDATA:VirusName}", DetectionType="%{GREEDYDATA:DetectionType}", Direction=%{GREEDYDATA:Direction}, FileName="%{GREEDYDATA:FileName}", FileType="%{GREEDYDATA:FileType}", Action=%{NOTSPACE:Action}, Hash="%{GREEDYDATA:Hash}"\)
+
+##%%01POLICY/6/POLICYDENY (USG6300)
+POLICYDENY %{HUAWEI}vsys=%{NOTSPACE}, protocol=%{NOTSPACE:Protocol}, source-ip=%{NOTSPACE:SrcIp}, source-port=%{NUMBER:SrcPort}, destination-ip=%{NOTSPACE:DstIp}, destination-port=%{NUMBER:DstPort}, time=%{GREEDYDATA}, source-zone=%{DATA:SrcZone}, destination-zone=%{DATA:DstZone}, application-name=%{GREEDYDATA:Application}, rule-name=%{NOTSPACE:Policy}\.
