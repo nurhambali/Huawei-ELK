@@ -60,7 +60,7 @@ LOGINSUC (%{HUAWEI} id=%{NOTSPACE}|%{HUAWEI}id=%{NOTSPACE}) time="%{DATA}" fw=%{
 
 
 #### Add BACKLIST
-#<188>Oct 18 2019 07:42:30 USG6300-01 %%01BLACKLIST/4/ADDOK(l): A blacklist entry was added. (SyslogId=100, IpVersion=IPv4, SrcIp=103.199.99.114, DstIp=any, SrcPort=any, DstPort=any, Protocol=any, User=any, VSysId=0, VSys=root, Reason= IPS Attack , Timeout=5 min)
+#<188>Oct 18 2019 07:42:30 USG6000V1 %%01BLACKLIST/4/ADDOK(l): A blacklist entry was added. (SyslogId=100, IpVersion=IPv4, SrcIp=193.168.3.1, DstIp=any, SrcPort=any, DstPort=any, Protocol=any, User=any, VSysId=0, VSys=root, Reason= IPS Attack , Timeout=5 min)
 ADDOK (%{HUAWEI}%{CISCO_REASON:Description}|%{HUAWEI} %{CISCO_REASON:Description}). \(SyslogId=%{NOTSPACE:SyslogId}, IpVersion=%{NOTSPACE:IpVersion}, SrcIp=%{NOTSPACE:SrcIp}, DstIp=%{NOTSPACE:DstIp}, SrcPort=%{NOTSPACE:SrcPort}, DstPort=%{NOTSPACE:DstPort}, Protocol=%{NOTSPACE:Protocol}, User=%{NOTSPACE:User}, VSysId=%{NOTSPACE}, VSys=%{NOTSPACE}, Reason= %{GREEDYDATA:Reason}, Timeout=%{GREEDYDATA:Timeout}min\)
 
 
